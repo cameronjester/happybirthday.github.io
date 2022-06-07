@@ -1,0 +1,144 @@
+---
+title: "The Ultimate Yahtzee Analysis"
+author: "Happy Birthday Jocelyn"
+date: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(infer)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(hrbrthemes)
+library(ggthemes)
+
+```
+
+```{r, include=FALSE}
+library(readxl)
+Yahtzee <- read_excel("~/Desktop/Yahtzee.xlsx")
+
+```
+
+![Ramen Yahtzee](https://m.media-amazon.com/images/S/aplus-media/vc/49b1bd50-2755-46c9-9688-660378b4bff4.__CR0,27,1920,594_PT0_SX970_V1___.jpg)
+
+
+## Introduction
+
+Happy Birthday, Jocelyn!!! I wanted to do something special and unique for Jocelyn Day, 2022. So, I figured I would do an analysis on our Yahtzee cards. This might help us make important, game-time decisions to improve our game. I hope you enjoy! 
+
+- Cameron <3 
+
+## The Cards 
+
+*Top Scores*
+
+- Jocelyn = 448 points 
+- Michael = 409 points 
+- Cameron = 275 points 
+
+*Lowest Scores*
+
+- Jocelyn = 162 points 
+- Michael = 154 points
+- Cameron = 156 points 
+
+*Average Score* 
+
+
+- Jocelyn = 247.52
+- Michael = 239.79
+- Cameron = **not enough scores for an accurate average** 
+
+*Win Percentages* 
+
+- Jocelyn = 42%
+- Michael = 41% 
+- Cameron = 23%
+
+
+As you can see, M and J are neck-and-neck for average score as well as highest win percentage. It's certainly a tight race. 
+
+
+```{r}
+Yahtzee %>%
+ggplot( aes(x = `Grand Total`, fill = `Player Name`)) + geom_density(alpha = 0.6) + labs(x = "Grand Total Score", y = "Frequency Percentage", title = "Grand Total Frequencies By Player") +
+  theme_solarized()
+```
+
+
+The graph above shows the Grand Total Score Frequencies for each player. The pink hump shows that Cameron has the highest frequency out of all three players, meaning she consistently scores below 300, with an average of about 230. Jocelyn has the largest spread between the three contestants, with her lowest score being 162 points and her highest being 448 points. Michael is overall the most consistent player, with a few major wins in the 400 range. 
+
+
+One important thing to consider, is how each player has such a drastically different playing style. For example, is someone more or less likely to try to get the top score bonus or *beef* up their lower score? Cameron ranks lowest in overall total points, should she try to mimic Michael's game? Should Michael aim to be more consistent like Jocelyn? How can Jocelyn make consistent wins in the upper echelon of Yahtzee scores (275-350 range)? Let's find out. 
+
+
+## Top Level Bonus 
+
+```{r}
+Yahtzee %>%
+  group_by(`Player Name`) %>%
+  count(Bonus)
+```
+Out of the three of us, Michael achieved the top level bonus the most, with 15 out of 34 times. Jocelyn came in second with making the bonus 14 times, and Cameron got it just twice. Huh, it might be time for her to rethink her strategy considering she has the lowest win percentage!
+
+But does getting the top level bonus really matter in the overall scheme of the game? Does the extra 35 points help leverage over other competitors? 
+
+```{r}
+Yahtzee %>%
+  group_by(`Player Name`, Bonus) %>%
+  tally(`Grand Total`) 
+```
+```{r}
+
+
+Yahtzee %>%
+ggplot(aes(x = `Grand Total`, y = `Player Name`, fill = Bonus)) + geom_col() +  coord_flip() +
+  theme_solarized() 
+```
+
+*Averages With and Without the Top Bonus* 
+
+- Jocelyn WITH = 236.57
+- Jocelyn WITHOUT = 236.30
+- Michael WITH = 272.40
+- Michael WITHOUT = 214
+- Cameron WITH = 253
+- Cameron WITHOUT = 220.09
+
+
+The answer is YES, getting the top level bonus DOES give a significant advantage against competitors. Michael showed the most impressive differential between getting and not getting the bonus, with a difference of 58.4 points. The reason this differential is over the 35 points the bonus yields is likely that achieving the bonus gives players confidence, in conjunction with more skillful moves. 
+
+We can see that it doesn't look like Jocelyn getting the top level bonus changes her average score. That is because of....
+
+## Jocelyn's Best Game (to date)
+
+While inputting data in my spreadsheet I was certainly blown away by Jocelyn's highest scoring Yahtzee game. While I unfortunately wasn't there to experience the game in all it's glory, I can only imagine how legendary it was. Let's break it down 
+
+```{r}
+Yahtzee %>%
+  group_by(`Player Name`) %>%
+  arrange(desc(`Grand Total`)) %>%
+  head(1)
+```
+
+Starting with her top scores, Jocelyn took a 0 for her carrots...a sometimes necessary play that likely made way for her high school later down the road. Similarly, she took a 2 for her corns, the second lowest score for corns. Although she almost made up for this with her remaining foods. She scored a whopping 18 for her limes, meaning she scored 6 limes, a.k.a *yathzee*. Despite the impressive lime score, she came 4 points away from reaching the top level bonus, gah, if only she had rolled 2 more corns. 
+
+Moving on to the bottom score for this legendary game, Jocelyn recorded some comparatively low 3 (20 points) and 4 (10 points) of a kinds compared to her other games. Jocelyn did achieve a full house, small straight, and a large straight. Her chance was a modest 14 points, but Jocelyn knew what sacrifices she had to make to achieve greatness. That greatness included not one, not two, but *THREE* Yahtzees!!!! Not only is that a personal record for Jocelyn, but blows the average world wide score according to science20.com out of the water. Amazing. Beautiful. Honorable. Hats off, Jocelyn. 
+
+## Conclusions 
+
+Well, I think we all have room for improvements, but let's not undermine the great games, and memories we have made. 
+
+Happy birthday, Jocelyn, I hope you have enjoyed this analysis. We love you! 
+
+
+
+
+
+

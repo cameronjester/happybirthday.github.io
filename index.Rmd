@@ -1,0 +1,19 @@
+---
+title: "Happy Birthday, Jocelyn"
+image: "unicorn_pic.jpeg"
+color1: "#5A59A3"
+color2: "#C66060"
+angle: 130
+links:
+
+output:
+  postcards::onofre
+---
+ 
+IT'S THAT SPECIAL TIME OF THE YEAR!!!! JUNE 6TH!!! JOCELYN DAY!! YAY! 
+
+CLICK BELOW FOR YOUR GIFT: 
+
+[HERE!](Yahtzee-Analysis.html)
+
+
